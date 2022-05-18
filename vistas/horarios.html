@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="lib/bootstrap/css/botonFlotante.css" rel="stylesheet">
+
+    <title>Turnos app</title>
+</head>
+<style>
+    html{
+        scroll-behavior: smooth;
+    }
+    .ocultar{
+        visibility: hidden;
+    }
+</style>
+<body>
+    <!-- Nav -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-dark bg-dark" id="cabecera">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">TURNOS APP</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="registroUsuarios.html">Registrar Usuario</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="turnos.html">Turnos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="permisos.html">Permisos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="puestos_horarios.html">Puestos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="horarios.html">Horarios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="reportes.html">Reportes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html">Salir</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+
+    <!-- Agregar Nuevo horario -->
+
+    <div class="card border-secondary mb-3" style="margin: 10px;">
+        <div class="card-header">
+            <legend style="text-align: center;">Agregar Tipo de turno</legend>
+        </div>
+        <div class="card-body">
+            <div style="display: flex; flex-direction: column; justify-content: center">
+                <form method="post" id="formulario" style="margin-bottom: 30px;" autocomplete="off">
+
+                    <input type="text" id="horarioId"hidden>
+                    
+                    <div class="mb-3" style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center;">
+                        <div class="mb-3" style="flex: 1; margin: 10px; min-width: 250px;">
+                            <div class="mb-3">
+                                <label class="form-label">Codigo</label>
+                                <input id="codigo" type="input" class="form-control" placeholder="Codigo del Turno" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3" style="flex: 1; margin: 10px; min-width: 250px;">
+                            <div class="mb-3">
+                                <label class="form-label">Hora Inicio</label>
+                                <input id="horaInicio" type="time" class="form-control hora"  required>
+                            </div>
+                        </div>
+    
+                        <div class="mb-3" style="flex: 1; margin: 10px; min-width: 250px;">
+                            <div class="mb-3">
+                                <label class="form-label">Hora Fin</label>
+                                <input id="horaFin" type="time" class="form-control hora" twelveHour="true" required>
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                    <div style="width: 100%; text-align: center; margin-top: 20px;">
+                        <button id='botonFrm' type="submit" class="btn btn-primary" style="margin: auto;">Registrar</button>
+                        <button id='btnFrm' type="button" class="btn btn-primary ocultar" style="margin: auto;">Cancelar</button>
+                    </div>
+
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Tabla Turnos-->
+
+    <div class="card border-secondary mb-3" style="margin: 10px;">
+        <div class="card-header">
+            <legend style="text-align: center;">Lista Tipos de Turnos</legend>
+        </div>
+        <div class="card-body">
+
+            <div style="margin: 10px;">
+                <table class="table">
+                    <thead class="bg-dark" style="color: rgb(238, 238, 238);">
+                        <tr>
+                            <th>Codigo</th>
+                            <th>Hora Inicio</th>
+                            <th>Hora Fin</th>
+                            <th>
+                                <div class="mb-3" style="width: 100%; height: 8px; text-align: end; padding-right: 10px;">
+                                    Accion
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="datosTabla">
+                        
+                        
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+    
+
+
+    
+    <!-- Boton subir -->
+    <a href="#cabecera" class="btn-flotante"><img src="./img/flecha_arriba.png" style="height: 20px;"></a>
+
+
+
+
+    <!-- LIBRERIAS -->
+
+    <!-- Script jquery -->
+    <script src="../ajax/lib/jquery-3.6.0.min.js"></script>
+
+    <!-- Alertas Sweet Alert -->
+    <script src="../ajax/lib/sweetalert.js"></script>
+
+    <!-- Bootstrap -->
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- App -->
+    <script src="../ajax/horarios.js"></script>
+
+    
+</body>
+
+</html>
