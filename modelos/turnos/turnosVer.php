@@ -24,7 +24,8 @@ if(isset($_POST['buscarT']) && $_POST["buscarT"] != ""){
     JOIN usuarios ON turnos_usuarios.usuarioId = usuarios.id
     JOIN puestos_trabajo ON puestos_horarios.puestoTrabajoId = puestos_trabajo.id
     WHERE usuarios.nombre LIKE '%$buscar%' OR usuarios.apellido LIKE '%$buscar%' OR usuarios.telefono LIKE '%$buscar%' OR puestos_trabajo.codigo LIKE '%$buscar%' OR puestos_horarios.horaInicio LIKE '%$buscar%' OR puestos_horarios.horaFin LIKE '%$buscar%' OR puestos_horarios.observacion LIKE '%$buscar%' OR turnos_usuarios.fechaTurno LIKE '%$buscar%'
-    ORDER BY turnos_usuarios.fechaTurno DESC, usuarios.nombre ASC ;
+    ORDER BY turnos_usuarios.fechaTurno DESC, usuarios.nombre ASC 
+    LIMIT 500;
     ";
 
     $resultado = mysqli_query($enlace, $consulta);
@@ -69,7 +70,8 @@ if(isset($_POST['buscarT']) && $_POST["buscarT"] != ""){
     JOIN puestos_horarios ON turnos_usuarios.puestoHorarioId = puestos_horarios.id
     JOIN usuarios ON turnos_usuarios.usuarioId = usuarios.id
     JOIN puestos_trabajo ON puestos_horarios.puestoTrabajoId = puestos_trabajo.id
-    ORDER BY turnos_usuarios.fechaTurno DESC;
+    ORDER BY turnos_usuarios.fechaTurno DESC
+    LIMIT 500;
     ";
 
     $resultado = mysqli_query($enlace, $consulta);

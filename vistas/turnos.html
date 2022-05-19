@@ -59,22 +59,22 @@
         <div class="card-body">
             <div style="display: flex; flex-direction: column; justify-content: center">
 
-                <div class="mb-3" style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center;">
+                <!-- <div class="mb-3" style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center;">
                     <div class="mb-3" style="flex: 2; margin: 10px; min-width: 120px;">
-                        <!-- formulario de consulta -->
+                        
                         <input id="buscarU" class="form-control me-2" type="search" placeholder="Buscar usuario"
                             aria-label="Search" style="background-color:rgb(249, 252, 255)">
-                    </div>
+                    </div> --> 
 
-                    <div class="mb-3" style="flex: 2; margin: 10px; min-width: 120px;">
+                    <!-- <div class="mb-3" style="flex: 2; margin: 10px; min-width: 120px;">
                         <select id="disabledSelect" class="form-select">
                             <option value="1" selected style="font-size: 15px;">Usuario 1</option>
                             <option value="2" style="font-size: 15px;">Usuario 2</option>
                             <option value="3" style="font-size: 15px;">Usuario 3</option>
                             <option value="3" style="font-size: 15px;">Usuario 4</option>
                         </select>
-                    </div>
-
+                    </div> -->
+<!-- 
                     <div class="mb-3" style="flex: 2; margin: 10px; min-width: 120px;">
                         <select id="disabledSelect" class="form-select">
                             <option value="1" selected>Puesto 1</option>
@@ -83,13 +83,20 @@
                             <option value="3">Puesto 4</option>
                         </select>
                     </div>
-                </div>
+                </div> -->
 
-                <form method="get" action="../reportes/reportes.php" style="margin-bottom: 30px;">
-                    
+                <form method="get" style="margin-bottom: 30px;" id="generarTurno">
+                    <div class="mb-3" style="flex: content; margin: 10px;">
+                        <label class="form-label">Fecha de inicio de turnos</label>
+                        <input id="fechaInicio" type="date" class="form-control" >
+                    </div>
                     <div style="width: 100%; text-align: center; margin-top: 20px;">
                         <button type="submit" class="btn btn-primary" style="margin: auto;">Generar</button>
                     </div>
+                </form>
+
+                <form method="get" action="../reportes/reportes.php" hidden>
+                    <button type="submit" hidden id="generaExcel"></button>
                 </form>
             </div>
         </div>

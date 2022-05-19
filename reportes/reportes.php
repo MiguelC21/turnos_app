@@ -1,17 +1,30 @@
-<?php 
+<?php
+
+
+
 require '../modelos/config/zonaHoraria.php';
 require '../vendor/autoload.php';
-
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 
+
 //////////////////////////////////////////////////////////////////Cargamos la plantilla/////////////////////////////////////////////////////////
 $reader = IOFactory::createReader('Xlsx');
 $spreadsheet = $reader->load('../reportes/plantilla.xlsx');
+
+//consultamos la ultima fecha generada
+$enlace = mysqli_connect('localhost', 'root', '', 'turnos-app'); //Conexion a la base de datos 
+
+$consulta0 = mysqli_query($enlace, "SELECT fechaTurno FROM turnos_usuarios ORDER by fechaTurno DESC LIMIT 1");
+$ultimaFechaTurno = mysqli_fetch_array($consulta0);
+$fecha = $ultimaFechaTurno['fechaTurno'];
+$fecha = date('Ymd', strtotime($fecha. ' - 13 days'));
+
 //Datos encabezado para 7 dias
-$fecha = date('Y-m-d');
+$fechaConsulta = date('Ymd',$fecha);
+// $fecha = date('Y-m-d');
 $mes = date('n', strtotime($fecha));
 $dia = date('d', strtotime($fecha));
 $diaL = date('D', strtotime($fecha));
@@ -27,6 +40,7 @@ $diaSemana = array (
     'Sat' => 'Sab',
     'Sun' => 'Dom'
 );
+
     
 
 $sheet = $spreadsheet->getActiveSheet();
@@ -51,19 +65,18 @@ for($i=1; $i <= 14; $i++){
 
 
 
-
 ///////////////////////////////////////AGREGAMOS EL CONTENIDO A LA PLANTILLA/////////////////////////////////////////////
 
 //Traemos los datos de nuetra base de datos
-$enlace = mysqli_connect('localhost', 'root', '', 'turnos-app'); //Conexion a la base de datos 
 $consulta1 = "SELECT
 usuarios.id AS usuarioId,
 usuarios.nombre AS nombre,
 usuarios.apellido AS apellido
 FROM turnos_usuarios
 JOIN usuarios ON turnos_usuarios.usuarioId = usuarios.id
+WHERE turnos_usuarios.fechaTurno >= '$fechaConsulta'
 GROUP BY usuarios.id
-ORDER BY usuarios.id ASC
+ORDER BY usuarios.id ASC;
 ";
 
 $consulta2 = "SELECT
@@ -80,7 +93,8 @@ FROM turnos_usuarios
 JOIN puestos_horarios ON turnos_usuarios.puestoHorarioId = puestos_horarios.id
 JOIN puestos_trabajo ON puestos_horarios.puestoTrabajoId = puestos_trabajo.id
 JOIN usuarios ON turnos_usuarios.usuarioId = usuarios.id
-ORDER BY usuarios.id ASC, turnos_usuarios.id ASC
+WHERE turnos_usuarios.fechaTurno >= '$fechaConsulta'
+ORDER BY usuarios.id ASC, turnos_usuarios.id ASC;
 ";
 
 $resultado1 = mysqli_query($enlace, $consulta1);
@@ -226,7 +240,7 @@ while($col = mysqli_fetch_array($tipoTurnos)){
 
 //////////////////////////////////////////////////////GENERAMOS LA DESCAGA DEL DUCUMENTO///////////////////////////////////////////
 
-$fechaRango = date('Y-m-d', strtotime($fechaNombre. ' + 13 days'));
+$fechaRango = date('Ymd', strtotime($fechaNombre. ' + 13 days'));
 $nombrePlantilla = "Turnos_{$fechaNombre}__{$fechaRango}.xlsx";
 
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -235,13 +249,6 @@ header('Cache-Control: max-age=0');
 
 $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
 $writer->save('php://output');
-
-
-
-
-
-
-
 
 
 ?>

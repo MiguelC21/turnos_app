@@ -1,21 +1,16 @@
 <?php 
 // Includes
+include "./modelos/config/conexion.php";
+include "./modelos/config/zonaHoraria.php";
+
+$consulta0 = mysqli_query($enlace, "SELECT fechaTurno FROM turnos_usuarios ORDER by fechaTurno DESC LIMIT 1");
+$ultimaFechaTurno = mysqli_fetch_array($consulta0);
+$fecha = $ultimaFechaTurno['fechaTurno'];
+$fecha = date('Ymd', strtotime($fecha. ' + 1 days'));
+
+echo $fecha;
 
 
-$diaSemana = array (
-    'Mon' => 'Lunes',
-    "Tue" => 'Martes',
-    'Wed' => 'Miercoles',
-    'Thu' => 'Jueves',
-    'Fri' => 'Viernes',
-    'Sat' => 'sabado',
-    'Sun' => 'Domingo'
-);
-$meses = array('Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre');
 
-$dia = date('D');
-$mes = date('n');
 
-echo $diaSemana['Tue'];
-echo $meses[$mes-1]
 ?>

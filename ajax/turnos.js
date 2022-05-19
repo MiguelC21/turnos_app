@@ -19,7 +19,7 @@ function buscar(){
             
             success: function (respuesta){
             
-                console.log(respuesta);
+                // console.log(respuesta);
                 let busqueda = JSON.parse(respuesta);
                 let template = '';
                 busqueda.forEach(obj => {
@@ -54,10 +54,10 @@ function obtenerTurnos(){
     $.ajax({
         url: '../modelos/turnos/turnosVer.php',
         type: "GET",
-
+        
         success: function (respuesta){
             
-            console.log(respuesta);
+            // console.log(respuesta);
             let busqueda = JSON.parse(respuesta);
             let template = '';
             busqueda.forEach(obj => {
@@ -82,6 +82,34 @@ function obtenerTurnos(){
 
     }
 
+    $('#generarTurno').submit(function(e){
+
+        e.preventDefault();
+
+        const datosForm ={
+            fechaInicio: $('#fechaInicio').val(),
+        }
+        
+        $.post("../modelos/turnos/generarTurno.php", datosForm, function (respuesta) {
+            $('#generarTurno').trigger('reset');
+            if(respuesta){
+                console.log(respuesta);
+
+                $('#generaExcel').click()
+
+                buscarTurno();
+
+                swal({ //Alerta registro exitoso
+                    title: "Accion exitoxa!",
+                    text: "Generando excel... Espera unos segundos",
+                    icon: "success",
+                    }
+                );
+            }
+            
+        }
+        );
+    })
 
 // Ejecucion de las funciones
 buscarTurno();
