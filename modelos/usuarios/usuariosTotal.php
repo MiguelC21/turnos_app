@@ -1,7 +1,8 @@
-<?php 
+<?php
+
 // Includes
-include "./modelos/config/conexion.php";
-include "./modelos/config/zonaHoraria.php";
+include "../config/conexion.php";
+include "../config/zonaHoraria.php";
 
 //Selecionamos los puestos horarios donde los puestos estan activos actualmente
 
@@ -19,12 +20,10 @@ WHERE estado = 1 AND permiso = 0;
 $activos = mysqli_num_rows($consulta);
 $disponibles = mysqli_num_rows($consulta2);
 
-$nRows = array(
+$nRows []= array(
     'activos' => $activos,
     'disponibles' => $disponibles
 );
 
 $jsonString = json_encode($nRows);
 echo $jsonString;
-
-?>

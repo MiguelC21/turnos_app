@@ -66,7 +66,7 @@ actualizar();
                 
                 let busqueda = JSON.parse(respuesta);
                         let template = '';
-                        
+                        let n=1;
                         busqueda.forEach(obj => {
                             
                             if(obj.estado == 0){
@@ -78,6 +78,7 @@ actualizar();
                                 estado = '<a href="../vistas/permisos.html"  type="button" class="btn btn-secondary">PERMISO</a>'
                             }
                             template += `<tr  idUsuario="${obj.id}"><td hidden >${obj.id}</td>
+                            <td>${n}</td>
                             <td>${obj.nombre}</td>
                             <td>${obj.apellido}</td>
                             <td>${obj.tipoDocumento}</td>
@@ -88,8 +89,10 @@ actualizar();
                             <td>${obj.fechaRegistro}</td>
                             <td>${estado}</td>
                             <td><button type="button" class="btn btn-warning editar" data-bs-toggle="modal" data-bs-target="#exampleModal">Editar</button></td> </tr>`
+                            n++;
                         });
                         $('#registros').html(template);
+                        turnosActivos();
             }
     
         })
@@ -196,7 +199,7 @@ actualizar();
                 success: function(respuesta){
                     let busqueda = JSON.parse(respuesta);
                     let template = '';
-                    
+                    n=1;
                     busqueda.forEach(obj => {
                         
                         if(obj.estado == 0){
@@ -208,6 +211,7 @@ actualizar();
                             estado = '<a href="../vistas/permisos.html"  type="button" class="btn btn-secondary">PERMISO</a>'
                         }
                         template += `<tr idUsuario="${obj.id}" > <td hidden>${obj.id}</td>
+                        <td>${n}</td>
                         <td>${obj.nombre}</td>
                         <td>${obj.apellido}</td>
                         <td>${obj.tipoDocumento}</td>
@@ -218,8 +222,10 @@ actualizar();
                         <td>${obj.fechaRegistro}</td>
                         <td>${estado}</td>
                         <td><button  type="button" class="btn btn-warning editar" data-bs-toggle="modal" data-bs-target="#exampleModal">Editar</button></td> </tr>`
+                        n++;
                     });
                     $('#registros').html(template);
+                    turnosActivos();
                 }
             })
             
@@ -229,6 +235,20 @@ actualizar();
     
     }
 
+    function turnosActivos(){
+        $.ajax({
+            url: "../modelos/usuarios/usuariosTotal.php",
+            type: "GET",
+            success: function (respuesta){
+                let busqueda = JSON.parse(respuesta)
+                busqueda.forEach(total =>{
+                    $('#disponibles').html(`Disponibles: ${total.disponibles}`);
+                    $('#activos').html(`Activos: ${total.activos}`);
+                })
+            }
+        })
+    
+    }
 
 
 

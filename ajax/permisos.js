@@ -109,7 +109,7 @@ function buscar(){
                 let busqueda = JSON.parse(respuesta);
                 let template = '';
                 
-                
+                let n=1;
                 busqueda.forEach(obj => {
                     let botones = ':::::::::::::::::::  :::::::::::::::::::'
                     if(obj.tipoPermiso != 'Cumpleaños'){
@@ -118,7 +118,8 @@ function buscar(){
                                 <button id="${obj.permisoId}" usuarioId="${obj.usuarioId}" type="button" class="btn btn-danger borrar">Borrar</button>`
                     }
                     template += `<tr>
-                        <td scope="row">${obj.nombre}</td>
+                        <td scope="row">${n}</td>
+                        <td>${obj.nombre}</td>
                         <td>${obj.apellido}</td>
                         <td>${obj.telefono}</td>
                         <td>${obj.tipoPermiso}</td>
@@ -129,6 +130,7 @@ function buscar(){
                             ${botones}
                         </td>
                     </tr>`
+                    n++;
                 });
     
                 $('#tablaPermisos').html(template);
@@ -155,7 +157,7 @@ function obtenerPermisos(){
             
             let busqueda = JSON.parse(respuesta);
             let template = '';
-
+            n=1;
             busqueda.forEach(obj => {
                 let botones = ':::::::::::::::::::  :::::::::::::::::::'
                 if(obj.tipoPermiso != 'Cumpleaños'){
@@ -164,7 +166,8 @@ function obtenerPermisos(){
                         <button id="${obj.permisoId}" usuarioId="${obj.usuarioId}" type="button" class="btn btn-danger borrar">Borrar</button>`
                 }
                 template += `<tr>
-                    <td scope="row">${obj.nombre}</td>
+                    <td>${n}</td>
+                    <td>${obj.nombre}</td>
                     <td>${obj.apellido}</td>
                     <td>${obj.telefono}</td>
                     <td>${obj.tipoPermiso}</td>
@@ -175,6 +178,7 @@ function obtenerPermisos(){
                         ${botones}
                     </td>
                 </tr>`
+                n++;
             });
 
             $('#tablaPermisos').html(template);

@@ -193,7 +193,7 @@
 
   <!-- Lista de usuarios-->
 
-  
+
 
   <!-- Barra de busqueda-->
 
@@ -201,6 +201,8 @@
     <div class="card-header">
       <legend style="text-align: center;">Lista de usuarios</legend>
     </div>
+    <legend id="activos" style="text-align: leeft; font-size: 18px; color:rgb(114, 114, 114); margin-left: 10px;">Activos: ###</legend>
+    <legend id="disponibles" style="text-align: leeft; font-size: 18px; color:rgb(114, 114, 114); margin-left: 10px;">Disponibles: ###</legend>
     <div class="card-body text-secondary">
       <form class="d-flex" autocomplete="off">
         <input id="buscar" class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search"
@@ -217,6 +219,7 @@
     <table class="table">
       <thead class="bg-dark" style="color: rgb(238, 238, 238);">
         <tr>
+          <th>N.</th>
           <th>Nombre</th>
           <th>Apellido</th>
           <th>Tipo Documento</th>

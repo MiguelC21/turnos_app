@@ -474,12 +474,12 @@ function listaPuestos(){
                 
         }
     })
-    
+    turnosActivos();
     setTimeout(listaHoraios,200);
 }
 
 
-//Funcion Buscar
+//Funcion Buscar Puestos
 function buscar(){
     if($('#buscarPuesto').val()){
 
@@ -547,7 +547,7 @@ function buscar(){
 
                 $('#listaPuestos').html("");
                 $('#listaPuestos').html(template);
-                
+                turnosActivos();
                 setTimeout(listaHoraios,200);
 
             }
@@ -614,7 +614,19 @@ function listaHoraios(){
 }
 
 
+// Funcion para buscar el numero de turnos activos actuamente
+
+function turnosActivos(){
+    $.ajax({
+        url: "../modelos/puestos_horarios/puesto_horariosTotal.php",
+        type: "GET",
+        success: function (respuesta){
+            $('#turnosActivos').html(`Total turnos activos: ${respuesta}`);
+        }
+    })
+
+}
+
+
 buscarLista();
-
-
 

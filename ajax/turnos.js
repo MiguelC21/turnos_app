@@ -22,9 +22,11 @@ function buscar(){
                 // console.log(respuesta);
                 let busqueda = JSON.parse(respuesta);
                 let template = '';
+                let n=1;
                 busqueda.forEach(obj => {
                     template += `<tr>
                         <td id="turnoId" hidden>${obj.turnoId}</td>
+                        <td >${n}</td>
                         <td >${obj.nombre}</td>
                         <td>${obj.apellido}</td>
                         <td>${obj.telefono}</td>
@@ -34,6 +36,7 @@ function buscar(){
                         <td>${obj.fechaTurno}</td>
                         <td>${obj.observacion}</td>
                     </tr>`
+                    n++;
                 });
                 
                 $('#datosTabla').html(template);
@@ -60,9 +63,11 @@ function obtenerTurnos(){
             // console.log(respuesta);
             let busqueda = JSON.parse(respuesta);
             let template = '';
+            n=1;
             busqueda.forEach(obj => {
                 template += `<tr>
                     <td id="turnoId" hidden>${obj.turnoId}</td>
+                    <td >${n}</td>
                     <td >${obj.nombre}</td>
                     <td>${obj.apellido}</td>
                     <td>${obj.telefono}</td>
@@ -72,6 +77,7 @@ function obtenerTurnos(){
                     <td>${obj.fechaTurno}</td>
                     <td>${obj.observacion}</td>
                 </tr>`
+                n++;
             });
 
             $('#datosTabla').html(template);

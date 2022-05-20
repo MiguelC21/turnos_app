@@ -168,31 +168,33 @@ function listaHoraios(){
         success: function (respuesta){
             let template = '';
             let busqueda = JSON.parse(respuesta);
-                busqueda.forEach(obj => {
-                    
-                    let horarioId = obj.horarioId
-                    let codigo = obj.codigo
-                    let horaInicio = obj.horaInicio
-                    let horaFin = obj.horaFin
-
-                    template += `
-                        <tr>
-                            <td scope="row">${codigo}</td>
-                            <td>${horaInicio}</td>
-                            <td>${horaFin}</td>
-                            <td>
-                                <div class="mb-3" style="width: 100%; text-align: end;">
-                                    <a href="#cabecera" ><button horarioId="${horarioId}" type="button" class="btn btn-warning editar">Editar</button></a>
-                                    <button horarioId="${horarioId}" type="button" class="btn btn-danger borrar">Borrar</button>
-                                </div>
-                            </td>
-                        </tr>
-                        `
-                        
-                });
-
-                $('#datosTabla').html(template);
+            let n=1;
+            busqueda.forEach(obj => {
                 
+                let horarioId = obj.horarioId
+                let codigo = obj.codigo
+                let horaInicio = obj.horaInicio
+                let horaFin = obj.horaFin
+
+                template += `
+                    <tr>
+                        <td>${n}</td>
+                        <td>${codigo}</td>
+                        <td>${horaInicio}</td>
+                        <td>${horaFin}</td>
+                        <td>
+                            <div class="mb-3" style="width: 100%; text-align: end;">
+                                <a href="#cabecera" ><button horarioId="${horarioId}" type="button" class="btn btn-warning editar">Editar</button></a>
+                                <button horarioId="${horarioId}" type="button" class="btn btn-danger borrar">Borrar</button>
+                            </div>
+                        </td>
+                    </tr>
+                    `
+                    n++;
+            });
+
+            $('#datosTabla').html(template);
+            
         }
 
     })

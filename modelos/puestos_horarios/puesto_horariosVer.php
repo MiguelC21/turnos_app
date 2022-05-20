@@ -34,3 +34,5 @@ while ($fila = mysqli_fetch_array($resultado)) {
 
 $jsonString = json_encode($json);
 echo $jsonString;
+
+
