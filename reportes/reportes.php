@@ -14,21 +14,33 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 $reader = IOFactory::createReader('Xlsx');
 $spreadsheet = $reader->load('../reportes/plantilla.xlsx');
 
-//consultamos la ultima fecha generada
+//CONSULATAMOS LA ULTIMA FECHA GENERADA EN LA BASE DE DATOS
 $enlace = mysqli_connect('localhost', 'root', '', 'turnos-app'); //Conexion a la base de datos 
 
 $consulta0 = mysqli_query($enlace, "SELECT fechaTurno FROM turnos_usuarios ORDER by fechaTurno DESC LIMIT 1");
-$ultimaFechaTurno = mysqli_fetch_array($consulta0);
-$fecha = $ultimaFechaTurno['fechaTurno'];
-$fecha = date('Ymd', strtotime($fecha. ' - 13 days'));
+$nRows = mysqli_num_rows($consulta0);
+$fechaActual = date('Y-m-d');
+//Validamos si la ultima fecha generada es mayor o igaul a la fecha actual
+if($nRows > 0 ){
+    $ultimaFechaTurno = mysqli_fetch_array($consulta0);
+    if($ultimaFechaTurno >= $fechaActual){
+        $fecha = $ultimaFechaTurno['fechaTurno'];
+        $curFecha = date('Y-m-d', strtotime($fecha. ' - 13 days'));
+    }
+}else{
+    $curFecha = date('Y-m-d', strtotime($fechaActual. ' + 1 days'));
+}
 
+
+// echo "<h1></h1>";
 //Datos encabezado para 7 dias
-$fechaConsulta = date('Ymd',$fecha);
-// $fecha = date('Y-m-d');
-$mes = date('n', strtotime($fecha));
-$dia = date('d', strtotime($fecha));
-$diaL = date('D', strtotime($fecha));
-$fechaNombre = $fecha;
+$fechaConsulta = $curFecha;
+// echo $fechaConsulta;
+
+$mes = date('n', strtotime($curFecha));
+$dia = date('d', strtotime($curFecha));
+$diaL = date('D', strtotime($curFecha));
+$fechaNombre = $curFecha;
 //convirtiendo fechas a español
 $meses = array('Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre');
 $diaSemana = array (
@@ -41,7 +53,7 @@ $diaSemana = array (
     'Sun' => 'Dom'
 );
 
-    
+
 
 $sheet = $spreadsheet->getActiveSheet();
 //Agregamos el nombre del mes
@@ -54,8 +66,8 @@ for($i=1; $i <= 14; $i++){
     $sheet->setCellValue($letra.'3', $dia);
     $sheet->setCellValue($letra.'2', $diaSemana[$diaL]);
 
-    $dia = date('d', strtotime($fecha. " + {$i} days"));
-    $diaL = date('D', strtotime($fecha. " + {$i} days"));
+    $dia = date('d', strtotime($curFecha. " + {$i} days"));
+    $diaL = date('D', strtotime($curFecha. " + {$i} days"));
 
     $ascii++;
 }
@@ -94,7 +106,7 @@ JOIN puestos_horarios ON turnos_usuarios.puestoHorarioId = puestos_horarios.id
 JOIN puestos_trabajo ON puestos_horarios.puestoTrabajoId = puestos_trabajo.id
 JOIN usuarios ON turnos_usuarios.usuarioId = usuarios.id
 WHERE turnos_usuarios.fechaTurno >= '$fechaConsulta'
-ORDER BY usuarios.id ASC, turnos_usuarios.id ASC;
+ORDER BY usuarios.id ASC, turnos_usuarios.id ASC ;
 ";
 
 $resultado1 = mysqli_query($enlace, $consulta1);
@@ -102,8 +114,7 @@ $resultado1 = mysqli_query($enlace, $consulta1);
 
 
 // ________________________________________________
-//Reset fecha
-$mes = date('m');
+
 
 //Recorremos los datos
 $contentStartRow = 4;
@@ -118,7 +129,8 @@ while($fila=mysqli_fetch_array($resultado1)){
     $ascii = 66;
     $userId = $fila['usuarioId'];//Current user
     // echo 'vuelta-';
-    $currentFecha = date('Y-m-d');//current fecha
+    $currentFecha = $curFecha;//current fecha
+
     $resultado2 = mysqli_query($enlace, $consulta2);
     while($col = mysqli_fetch_array($resultado2)){
         $letra = chr($ascii);
@@ -130,6 +142,7 @@ while($fila=mysqli_fetch_array($resultado1)){
         while(!$pasa){
             $letra = chr($ascii);
             if($userId == $curUser){
+                // echo "<h1></h1>";
                 // echo $userId;
                 // echo "-.$curUser";
                 // echo "<h1></h1>";
@@ -184,7 +197,7 @@ while($fila=mysqli_fetch_array($resultado1)){
         }
 
     }
-    // echo "<h2>----------------------Nuevo User------------------------</h2>";
+    // echo "<h4>----------------------Nuevo User------------------------</h4>";
     $currentContentRow++;
 
 }
@@ -249,6 +262,7 @@ header('Cache-Control: max-age=0');
 
 $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
 $writer->save('php://output');
+
 
 
 ?>

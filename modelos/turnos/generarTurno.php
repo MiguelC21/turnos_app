@@ -7,29 +7,39 @@ include "../config/zonaHoraria.php";
 
 
 //////////////////////////////////////////PARAMETROS////////////////////////////////////////////
-// consultamos la ultima fecha generada
+// CONSULTAMOS LA ULTIMA FECHA GENERADA EN LA BASE DE DATOS
 $consulta0 = mysqli_query($enlace, "SELECT fechaTurno FROM turnos_usuarios ORDER by fechaTurno DESC LIMIT 1");
-$ultimaFechaTurno = mysqli_fetch_array($consulta0);
-$fecha = $ultimaFechaTurno['fechaTurno'];
-$fecha = date('Ymd', strtotime($fecha. ' + 1 days'));
+$nRows = mysqli_num_rows($consulta0);
+$fechaActual = date('Y-m-d');
+//Validamos si la ultima fecha generada es mayor o igaul a la fecha actual
+if($nRows > 0 ){
+    $ultimaFechaTurno = mysqli_fetch_array($consulta0);
+    if($ultimaFechaTurno >= $fechaActual){
+        $fecha = $ultimaFechaTurno['fechaTurno'];
+        $curFecha = date('Ymd', strtotime($fecha. ' + 1 days'));
+    }
+}else{
+    $curFecha = date('Ymd', strtotime($fechaActual. ' + 1 days'));
+}
 
 
 // $fecha= date('Ymd');
-$dia = date('d', strtotime($fecha. ' + 0 days'));
+$dia = date('d', strtotime($curFecha. ' + 0 days'));
 $listaTurnos = array();
 $e = 0;//empleados
 
 ////////////////////BUCLE PARA GENERAR EL LISTADO DE LA TABLA LISTA TURNOS////////////////////
 for($i=1; $i<=14; $i++){  //Longitud recorridos del for es igual al numero de dias a generar
-    // echo "<h1></h1>";
+    echo "<h1></h1>";
     // echo "   /  -- DIA .$dia.--  /   ";
-    // $fecha ="{$año}{$mes}{$dia}";
+    echo $curFecha;
+    
     $listaEmpleados = array();
     $listaPuestosHorarios = array();
     //CONSULTA LISTADO DE EMPLEADOS DISPONIBLES (pendiente poner fecha a consultar)
     $consuta1 = "SELECT id, nombre, apellido, telefono
     FROM usuarios
-    WHERE estado = 1 AND id NOT IN (SELECT usuarioId FROM permisos WHERE fechaInicio <= $fecha AND fechaFin >= $fecha) 
+    WHERE estado = 1 AND id NOT IN (SELECT usuarioId FROM permisos WHERE fechaInicio <= $curFecha AND fechaFin >= $curFecha) 
     ORDER BY id ASC;
     ";
 
@@ -76,7 +86,7 @@ for($i=1; $i<=14; $i++){  //Longitud recorridos del for es igual al numero de di
         // echo $listaEmpleados[$e]['nombre'];
         // echo " - ";
         $listaTurnos[]=array(
-            'fechaTurno' => $fecha,
+            'fechaTurno' => $curFecha,
             'usuarioId' => $listaEmpleados[$e]['usuarioId'],
             'nombre' => $listaEmpleados[$e]['nombre'],
             'puesto' => $listaPuestosHorarios[$h]['puestoTrabajo'],
@@ -97,8 +107,8 @@ for($i=1; $i<=14; $i++){  //Longitud recorridos del for es igual al numero de di
     $dia++;
     
 
-    // echo $fecha;
-    $fecha = date('Ymd', strtotime($fecha. ' + 1 days'));
+    // echo $curFecha;
+    $curFecha = date('Ymd', strtotime($curFecha. ' + 1 days'));
 
 }
 
@@ -107,6 +117,7 @@ for($i=1; $i<=14; $i++){  //Longitud recorridos del for es igual al numero de di
 
 
 ////////////////////PROCESO DE INSERCION DE DATOS A LA TABLA turnos_usuarios//////////////////
+
 $i=0;
 while($i < count($listaTurnos)){
     $usuario = $listaTurnos[$i]['usuarioId'];
@@ -115,15 +126,7 @@ while($i < count($listaTurnos)){
     $consulta3 = "INSERT INTO turnos_usuarios VALUES (null, $usuario, $puesto, DEFAULT, $fecha)";
     mysqli_query($enlace, $consulta3);
     $i++;
-
 }
-
-
-//Vamos al documento donde se encuentra la plantilla del excel con los turnos a disposicion
-
-// echo '<meta http-equiv="refresh" content="0; url=/turnos-app/reportes/reportes.php">';
-
-// echo '<meta http-equiv="refresh" content="0; url=/turnos-app/vistas/turnos.html">';
 
 
 
@@ -170,45 +173,45 @@ while($i < count($listaTurnos)){
 //////////////////PRUEBAS EN CONSOLA//////////////////
 
 
-//CONSULTA LISTADO DE PUESTO HORARIOS
+// CONSULTA LISTADO DE PUESTO HORARIOS
 
-// $consulta2 = "SELECT
-// puestos_horarios.id AS id, 
-// puestos_trabajo.codigo AS puestoTrabajo, 
-// puestos_horarios.horaInicio AS horaInicio, 
-// puestos_horarios.horaFin AS horaFin, 
-// puestos_horarios.observacion AS observacion
-// FROM puestos_horarios
-// JOIN puestos_trabajo ON puestos_horarios.puestoTrabajoId = puestos_trabajo.id
-// WHERE puestos_trabajo.estado = 1;
-// ";
+$consulta2 = "SELECT
+puestos_horarios.id AS id, 
+puestos_trabajo.codigo AS puestoTrabajo, 
+puestos_horarios.horaInicio AS horaInicio, 
+puestos_horarios.horaFin AS horaFin, 
+puestos_horarios.observacion AS observacion
+FROM puestos_horarios
+JOIN puestos_trabajo ON puestos_horarios.puestoTrabajoId = puestos_trabajo.id
+WHERE puestos_trabajo.estado = 1;
+";
 
-// $resultado2 = mysqli_query($enlace, $consulta2);
+$resultado2 = mysqli_query($enlace, $consulta2);
 
-// while($fila =mysqli_fetch_array($resultado2)){
-//     $listaPuestosHorarios[] = array(
-//         'puestoTrabajo' => $fila['puestoTrabajo'],
-//         'horaInicio' => $fila['horaInicio'],
-//         'horaFin' => $fila['horaFin'],
-//         'observacion' => $fila['observacion']
-//     );
-// }
-
-
-// //Parametros
-// $nEmpleados = count($listaEmpleados);
-// $nTurnos = count($listaPuestosHorarios);
-// $nTotal = count($listaTurnos);
+while($fila =mysqli_fetch_array($resultado2)){
+    $listaPuestosHorarios[] = array(
+        'puestoTrabajo' => $fila['puestoTrabajo'],
+        'horaInicio' => $fila['horaInicio'],
+        'horaFin' => $fila['horaFin'],
+        'observacion' => $fila['observacion']
+    );
+}
 
 
-// //Mostrando los arreglos en console
+//Parametros
+$nEmpleados = count($listaEmpleados);
+$nTurnos = count($listaPuestosHorarios);
+$nTotal = count($listaTurnos);
 
-// $jsonE = json_encode($listaEmpleados);
-// $jsonP = json_encode($listaPuestosHorarios);
-// $jsonT = json_encode($listaTurnos);
+
+//Mostrando los arreglos en console
+
+$jsonE = json_encode($listaEmpleados);
+$jsonP = json_encode($listaPuestosHorarios);
+$jsonT = json_encode($listaTurnos);
 
 ?>
-// <script>
+<script>
     console.log(<?php echo $jsonE;?> );
     console.log(<?php echo $jsonP;?> );
     console.log(<?php echo $jsonT;?> );
