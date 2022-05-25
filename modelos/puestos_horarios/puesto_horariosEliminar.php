@@ -16,11 +16,10 @@ if ($accion == "eliminar") {  //Actualiza datos
     $respuesta = mysqli_query($enlace, $consulta);
 
     if($respuesta){
-        // echo 'Eliminado Exitosamente!';
+        echo 'Eliminado Exitosamente!';
     }
 
 }
-
 
 
 ?>

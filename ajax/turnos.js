@@ -93,14 +93,18 @@ function obtenerTurnos(){
         e.preventDefault();
 
         const datosForm ={
-            fechaInicio: $('#fechaInicio').val(),
+            fechaUser: $('#fechaInicio').val(),
         }
-        
+        // console.log(datosForm);
         $.post("../modelos/turnos/generarTurno.php", datosForm, function (respuesta) {
             $('#generarTurno').trigger('reset');
-            if(respuesta){
-                console.log(respuesta);
+            msg = JSON.parse(respuesta)
+            console.log(msg)
+            if(msg == 'error'){
+                swal("Error al generar", "El numero de empleados disponibles no son suficientes para cubrir la totalidad de turnos activos actualmente.");
+            }else{
 
+                setTimeout(300);
                 $('#generaExcel').click()
 
                 buscarTurno();
@@ -112,9 +116,8 @@ function obtenerTurnos(){
                     }
                 );
             }
-            
-        }
-        );
+        
+        });
     })
 
 // Ejecucion de las funciones

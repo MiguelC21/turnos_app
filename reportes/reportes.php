@@ -27,9 +27,10 @@ if($nRows > 0 ){
         $fecha = $ultimaFechaTurno['fechaTurno'];
         $curFecha = date('Y-m-d', strtotime($fecha. ' - 13 days'));
     }
-}else{
-    $curFecha = date('Y-m-d', strtotime($fechaActual. ' + 1 days'));
 }
+// else{
+//     $curFecha = date('Y-m-d', strtotime($fechaActual. ' + 0 days'));
+// }
 
 
 // echo "<h1></h1>";
@@ -116,7 +117,7 @@ $resultado1 = mysqli_query($enlace, $consulta1);
 // ________________________________________________
 
 
-//Recorremos los datos
+// RECORREMOS LOS DATOS Y LOA AGRAAGMOS A LA PLANTILLA
 $contentStartRow = 4;
 $currentContentRow = 4;
 
